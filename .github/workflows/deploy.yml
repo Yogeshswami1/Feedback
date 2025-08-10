@@ -1,0 +1,47 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH to EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2KEY }}
+          script: |
+            echo "✅ Connected to EC2"
+
+            cd /var/www/html/Feedback
+
+            echo "📦 Pulling latest code..."
+            sudo chown -R ubuntu:ubuntu .
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "🔍 Latest commit:"
+            git log -1
+
+            echo "🧹 Stopping Docker..."
+            docker compose down
+
+            echo "🧱 Pruning old Docker images..."
+            docker image prune -a -f
+
+            echo "🚧 Rebuilding app..."
+            docker compose build --no-cache
+
+            echo "🚀 Starting updated app..."
+            docker compose up -d --build
+
+            echo "✅ Deployment complete!"
