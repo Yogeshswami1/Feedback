@@ -1,10 +1,10 @@
 version: '3'
 services:
   frontend:
-    context: ./client
+    build: ./client
     container_name: frontend
     ports:
-      - "3000:80"  # production ke liye 80 port rakho
+      - "3000:80"
     restart: always
 
   backend:
