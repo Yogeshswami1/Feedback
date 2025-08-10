@@ -1,9 +1,7 @@
-FROM node:20-alpine as builder
-WORKDIR /app
-COPY . .
-# nginx serve stage
+# Direct Nginx serve without build
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
+COPY dist/ .
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
