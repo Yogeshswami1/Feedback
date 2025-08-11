@@ -521,7 +521,7 @@ const handleDelete = async () => {
           }}
         >
           <h2 style={{ color: darkMode ? "#fff" : "#000", margin: 0 }}>
-            AI Sentiment Analyzer
+            AI Sentiment Analyzer of yogesh kumar
           </h2>
            <Switch
             checkedChildren={<BulbFilled />}
